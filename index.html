@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nondescripts Pickleball Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Barlow:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --navy:#0a1628;--navy2:#111e35;--navy3:#1a2d4a;
+  --accent:#e8c84a;--accent2:#f0d96e;
+  --white:#f5f2eb;--muted:#8a9ab5;
+  --green:#3dba7a;--red:#e85555;
+  --fd:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:var(--fb);min-height:100vh}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,0.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(232,200,74,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-left{display:flex;align-items:center;gap:14px}
+.nav-logo-img{height:36px;width:36px;object-fit:contain;border-radius:4px}
+.nav-logo-text{font-family:var(--fd);font-size:17px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}
+.nav-links{display:flex;gap:0}
+.nav-links a{color:var(--muted);font-size:11px;text-decoration:none;padding:0 12px;height:56px;display:flex;align-items:center;transition:color 0.2s;letter-spacing:0.5px;text-transform:uppercase;font-weight:500}
+.nav-links a:hover{color:var(--accent)}
+.nav-social{display:flex;gap:8px;align-items:center}
+.nav-social a{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);color:var(--muted);text-decoration:none;font-size:13px;transition:all 0.2s}
+.nav-social a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:80px 2rem 4rem;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 80% 50%,rgba(232,200,74,0.06) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;pointer-events:none;opacity:0.04;background-image:linear-gradient(rgba(232,200,74,1) 1px,transparent 1px),linear-gradient(90deg,rgba(232,200,74,1) 1px,transparent 1px);background-size:40px 40px}
+.hero-inner{max-width:900px;margin:0 auto;width:100%;position:relative}
+.hero-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;font-weight:500}
+.hero-title{font-family:var(--fd);font-size:clamp(48px,10vw,96px);font-weight:800;line-height:0.9;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-title span{color:var(--accent);display:block}
+.hero-desc{font-size:16px;color:var(--muted);max-width:500px;line-height:1.7;margin-bottom:2.5rem}
+.hero-logo{width:120px;height:120px;object-fit:contain;margin-bottom:1.5rem;display:block}
+.hero-logo-placeholder{width:100px;height:100px;border:2px dashed rgba(232,200,74,0.3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;color:rgba(232,200,74,0.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;text-align:center;padding:12px}
+.hero-stats{display:flex;gap:2.5rem;margin-bottom:3rem;flex-wrap:wrap}
+.hs-num{font-family:var(--fd);font-size:36px;font-weight:700;color:var(--accent);line-height:1}
+.hs-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:4px;font-family:var(--fd);font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;transition:all 0.2s}
+.btn-primary{background:var(--accent);color:var(--navy)}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--white);border:1px solid rgba(245,242,235,0.3)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-yt{background:#ff0000;color:#fff}
+.btn-yt:hover{background:#cc0000}
+.btn-tt{background:#010101;color:#fff;border:1px solid rgba(255,255,255,0.2)}
+.btn-tt:hover{border-color:var(--accent);color:var(--accent)}
+.court-line{position:absolute;right:0;top:50%;transform:translateY(-50%);width:320px;height:320px;border:1px solid rgba(232,200,74,0.08);border-radius:50%;pointer-events:none}
+.court-line::before{content:'';position:absolute;inset:20px;border:1px solid rgba(232,200,74,0.05);border-radius:50%}
+
+/* SECTIONS */
+section{padding:5rem 2rem}
+.section-inner{max-width:960px;margin:0 auto}
+.section-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem;font-weight:600}
+.section-title{font-family:var(--fd);font-size:clamp(30px,5vw,52px);font-weight:700;text-transform:uppercase;line-height:1;margin-bottom:2rem}
+
+/* OVERVIEW */
+#stats{background:var(--navy2)}
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1px;background:rgba(232,200,74,0.08);border:1px solid rgba(232,200,74,0.08);border-radius:8px;overflow:hidden;margin-bottom:2.5rem}
+.ov{background:var(--navy2);padding:1.25rem 1rem}
+.ov-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.ov-val{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--accent);line-height:1}
+.ov-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* PLAYERS */
+#players{background:var(--navy)}
+.fmt-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.fmt-tab{padding:4px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);font-size:12px;cursor:pointer;color:var(--muted);background:transparent;font-family:var(--fb);transition:all 0.2s}
+.fmt-tab.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600}
+.player-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);border-radius:8px;overflow:hidden}
+.pcard{background:var(--navy2);padding:1.25rem;transition:background 0.2s}
+.pcard:hover{background:var(--navy3)}
+.pcard-top{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.pavatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:15px;font-weight:700;flex-shrink:0}
+.pcard-name{font-family:var(--fd);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.pcard-role{font-size:11px;color:var(--muted)}
+.pcard-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pcs-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.pcs-val{font-family:var(--fd);font-size:20px;font-weight:600;line-height:1.2}
+.win-bar-bg{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;margin-top:8px}
+.win-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
+
+/* DUPR */
+#dupr{background:var(--navy2)}
+.dupr-tabs{display:flex;gap:0;border-bottom:1px solid rgba(232,200,74,0.1);margin-bottom:1.5rem}
+.dupr-tab{padding:8px 20px;font-family:var(--fd);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;color:var(--muted);background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.dupr-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.dupr-table{width:100%;border-collapse:collapse}
+.dupr-table th{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:left;font-weight:500}
+.dupr-table th.r{text-align:right}
+.dupr-table td{padding:12px 12px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
+.dupr-table tr:last-child td{border-bottom:none}
+.dupr-table tr:hover td{background:rgba(255,255,255,0.02)}
+.rank-badge{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--muted)}
+.rank-badge.g{color:var(--accent)}.rank-badge.s{color:#b0b8c8}.rank-badge.b{color:#c9845a}
+.d-avatar{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;margin-right:10px;vertical-align:middle}
+.d-name{font-size:15px;font-weight:500;vertical-align:middle}
+.d-rating{font-family:var(--fd);font-size:24px;font-weight:700;text-align:right}
+.d-delta{text-align:right}
+.delta-up{font-size:12px;background:rgba(61,186,122,0.12);color:var(--green);padding:2px 8px;border-radius:4px;font-weight:500}
+.delta-dn{font-size:12px;background:rgba(232,85,85,0.12);color:var(--red);padding:2px 8px;border-radius:4px;font-weight:500}
+.delta-nil{font-size:12px;color:var(--muted)}
+.dupr-bar-bg{width:100px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;display:inline-block;vertical-align:middle}
+.dupr-bar-fill{height:100%;border-radius:2px}
+.edit-section{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px}
+.edit-note{font-size:12px;color:var(--muted)}
+.btn-sm{padding:6px 16px;font-size:12px;border-radius:4px;font-family:var(--fd);font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.2s}
+.btn-sm-accent{background:var(--accent);color:var(--navy)}
+.btn-sm-outline{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.1)}
+.btn-sm-outline:hover{border-color:var(--accent);color:var(--accent)}
+.rating-input{font-family:var(--fd);font-size:18px;font-weight:600;width:80px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:4px 8px;color:var(--white);text-align:right}
+.rating-input:focus{outline:none;border-color:var(--accent)}
+.last-updated{font-size:11px;color:var(--muted);margin-top:1rem;text-align:right}
+
+/* H2H */
+#h2h{background:var(--navy)}
+.h2h-wrap{overflow-x:auto}
+.h2h-table{border-collapse:collapse;width:100%;min-width:520px}
+.h2h-table th{font-size:11px;color:var(--muted);padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.06);text-align:center;text-transform:uppercase;letter-spacing:1px;font-weight:500}
+.h2h-table th:first-child{text-align:left}
+.h2h-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:center;font-size:13px}
+.h2h-table td:first-child{text-align:left;font-weight:500;font-size:13px}
+.h2h-self{color:var(--muted);background:rgba(255,255,255,0.02)}
+.h2h-win{color:var(--green);font-weight:500}
+.h2h-loss{color:var(--red);font-weight:500}
+.h2h-note{font-size:11px;color:var(--muted);margin-bottom:0.75rem}
+
+/* GALLERY */
+#gallery{background:var(--navy2)}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:3px}
+.gallery-item{aspect-ratio:1;overflow:hidden;position:relative;cursor:pointer;background:var(--navy3)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s}
+.gallery-item:hover img{transform:scale(1.05)}
+.gallery-placeholder{aspect-ratio:1;border:1px dashed rgba(232,200,74,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(232,200,74,0.3);font-size:11px;text-transform:uppercase;letter-spacing:1px;border-radius:4px;cursor:pointer;transition:all 0.2s;background:var(--navy3)}
+.gallery-placeholder:hover{border-color:rgba(232,200,74,0.5);color:rgba(232,200,74,0.6)}
+.gallery-placeholder svg{width:28px;height:28px;opacity:0.4}
+.gallery-note{font-size:12px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:999;align-items:center;justify-content:center}
+.lightbox.open{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:4px}
+.lightbox-close{position:absolute;top:20px;right:24px;color:var(--white);font-size:28px;cursor:pointer;opacity:0.7;background:none;border:none;line-height:1}
+.lightbox-close:hover{opacity:1}
+.upload-hint{text-align:center;padding:2rem;color:var(--muted);font-size:13px;border:1px dashed rgba(255,255,255,0.1);border-radius:8px}
+
+/* SOCIAL */
+#social{background:var(--navy)}
+.social-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.social-card{border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.5rem;display:flex;flex-direction:column;gap:12px;transition:border-color 0.2s}
+.social-card:hover{border-color:rgba(232,200,74,0.3)}
+.social-icon-wrap{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.social-platform{font-family:var(--fd);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.social-handle{font-size:13px;color:var(--muted)}
+.social-link{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:4px;font-family:var(--fd);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;transition:all 0.2s;width:fit-content}
+.yt-link{background:rgba(255,0,0,0.1);color:#ff4444;border:1px solid rgba(255,0,0,0.2)}
+.yt-link:hover{background:#ff0000;color:#fff}
+.tt-link{background:rgba(255,255,255,0.05);color:var(--white);border:1px solid rgba(255,255,255,0.1)}
+.tt-link:hover{background:var(--accent);color:var(--navy);border-color:var(--accent)}
+
+/* SESSIONS */
+#sessions{background:var(--navy2)}
+.session-card{border:1px solid rgba(232,200,74,0.1);border-radius:8px;margin-bottom:1rem;overflow:hidden}
+.session-hdr{background:rgba(232,200,74,0.04);padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.session-hdr:hover{background:rgba(232,200,74,0.08)}
+.session-date{font-family:var(--fd);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.session-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.spill{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.spill-d{background:rgba(232,200,74,0.1);color:var(--accent)}
+.spill-s{background:rgba(61,186,122,0.1);color:var(--green)}
+.session-body{padding:1rem 1.25rem;display:none;border-top:1px solid rgba(255,255,255,0.04)}
+.session-body.open{display:block}
+.game-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;gap:8px}
+.game-row:last-child{border-bottom:none}
+.game-num{font-family:var(--fd);font-size:11px;color:var(--muted);width:56px;flex-shrink:0}
+.game-teams{flex:1;color:var(--white)}
+.game-score{font-family:var(--fd);font-size:15px;font-weight:600;color:var(--accent);white-space:nowrap}
+.chevron{color:var(--muted);font-size:11px;transition:transform 0.2s}
+.chevron.open{transform:rotate(180deg)}
+
+/* FOOTER */
+footer{background:var(--navy);border-top:1px solid rgba(232,200,74,0.08);padding:2.5rem 2rem;text-align:center}
+.footer-logo-img{height:52px;object-fit:contain;margin-bottom:0.75rem}
+.footer-logo-text{font-family:var(--fd);font-size:20px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:0.5rem}
+.footer-sub{font-size:12px;color:var(--muted);margin-bottom:1rem}
+.footer-social{display:flex;justify-content:center;gap:12px;margin-top:1rem}
+.footer-social a{color:var(--muted);font-size:13px;text-decoration:none;padding:6px 14px;border:1px solid rgba(255,255,255,0.08);border-radius:4px;font-family:var(--fd);font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s}
+.footer-social a:hover{color:var(--accent);border-color:rgba(232,200,74,0.3)}
+
+/* CHART */
+.chart-wrap{position:relative;width:100%;height:240px}
+
+@media(max-width:600px){
+  nav{padding:0 1rem}
+  .nav-links a{padding:0 7px;font-size:10px}
+  .nav-social{display:none}
+  section{padding:3rem 1rem}
+  .hero-stats{gap:1.5rem}
+  .social-cards{grid-template-columns:1fr}
+  .court-line{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <!-- LOGO: replace the img src with your logo file path e.g. "logo.png" -->
+    <img class="nav-logo-img" src="logo.png" alt="NPC" onerror="this.style.display='none'">
+    <div class="nav-logo-text">NPC</div>
+  </div>
+  <div class="nav-links">
+    <a href="#stats">Stats</a>
+    <a href="#players">Players</a>
+    <a href="#dupr">DUPR</a>
+    <a href="#h2h">H2H</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#sessions">Sessions</a>
+  </div>
+  <div class="nav-social">
+    <!-- REPLACE href with your actual YouTube and TikTok URLs -->
+    <a href="https://youtube.com/@NondescriptsPC" target="_blank" title="YouTube">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+    <a href="https://tiktok.com/@YourHandle" target="_blank" title="TikTok">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="court-line"></div>
+  <div class="hero-inner">
+    <!-- LOGO: replace src with your logo filename e.g. "logo.png" -->
+    <img class="hero-logo" src="logo.png" alt="NPC Logo" onerror="this.style.display='none'">
+    <div class="hero-eyebrow">Est. 2026 · Colombo, Sri Lanka</div>
+    <h1 class="hero-title">Nondescripts<span>Pickleball Club</span></h1>
+    <p class="hero-desc">The official stats hub for NPC — tracking every session for the love of that competitive spirit.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-num">43</div><div class="hs-label">Games played</div></div>
+      <div class="hs"><div class="hs-num">7</div><div class="hs-label">Players</div></div>
+      <div class="hs"><div class="hs-num">5</div><div class="hs-label">Sessions</div></div>
+      <div class="hs"><div class="hs-num">2</div><div class="hs-label">Venues</div></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#stats" class="btn btn-primary">View Stats</a>
+      <a href="https://youtube.com/@NondescriptsPC" target="_blank" class="btn btn-yt">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube
+      </a>
+      <a href="https://tiktok.com/@YourHandle" target="_blank" class="btn btn-tt">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+        TikTok
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+<div class="section-inner">
+  <div class="section-label">Club overview</div>
+  <div class="section-title">Season Stats</div>
+  <div class="overview-grid">
+    <div class="ov"><div class="ov-label">Total games</div><div class="ov-val">43</div></div>
+    <div class="ov"><div class="ov-label">Doubles</div><div class="ov-val">37</div></div>
+    <div class="ov"><div class="ov-label">Singles</div><div class="ov-val">6</div></div>
+    <div class="ov"><div class="ov-label">Sessions</div><div class="ov-val">5</div><div class="ov-sub">4 days</div></div>
+    <div class="ov"><div class="ov-label">Total points</div><div class="ov-val" id="totalPts">—</div></div>
+    <div class="ov"><div class="ov-label">Avg margin</div><div class="ov-val" id="avgMargin">—</div></div>
+    <div class="ov"><div class="ov-label">Misfits games</div><div class="ov-val">36</div><div class="ov-sub">Delkanda</div></div>
+    <div class="ov"><div class="ov-label">WTP games</div><div class="ov-val">7</div><div class="ov-sub">Rajagiriya</div></div>
+  </div>
+  <div class="chart-wrap"><canvas id="ptChart"></canvas></div>
+</div>
+</section>
+
+<!-- PLAYERS -->
+<section id="players">
+<div class="section-inner">
+  <div class="section-label">The squad</div>
+  <div class="section-title">Player Stats</div>
+  <div class="fmt-tabs" id="fmtSwitch">
+    <button class="fmt-tab active" onclick="switchFmt('all',this)">All</button>
+    <button class="fmt-tab" onclick="switchFmt('doubles',this)">Doubles</button>
+    <button class="fmt-tab" onclick="switchFmt('singles',this)">Singles</button>
+  </div>
+  <div class="player-grid" id="playerGrid"></div>
+</div>
+</section>
+
+<!-- DUPR -->
+<section id="dupr">
+<div class="section-inner">
+  <div class="section-label">Ratings</div>
+  <div class="section-title">DUPR Leaderboard</div>
+  <div class="dupr-tabs">
+    <button class="dupr-tab active" onclick="showDupr('doubles',this)">Doubles</button>
+    <button class="dupr-tab" onclick="showDupr('singles',this)">Singles</button>
+  </div>
+  <div class="edit-section">
+    <div class="edit-note" id="duprUpdated">Update after each session</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-sm btn-sm-outline" id="cancelEditBtn" onclick="cancelEdit()" style="display:none">Cancel</button>
+      <button class="btn-sm btn-sm-accent" id="editBtn" onclick="toggleEdit()">Edit Ratings</button>
+    </div>
+  </div>
+  <div id="duprBoard"></div>
+</div>
+</section>
+
+<!-- H2H -->
+<section id="h2h">
+<div class="section-inner">
+  <div class="section-label">Records</div>
+  <div class="section-title">Head to Head</div>
+  <div class="fmt-tabs" style="margin-bottom:0.75rem">
+    <button class="fmt-tab active" onclick="showH2H('all',this)">All</button>
+    <button class="fmt-tab" onclick="showH2H('doubles',this)">Doubles</button>
+    <button class="fmt-tab" onclick="showH2H('singles',this)">Singles</button>
+  </div>
+  <p class="h2h-note">Row player's W-L record vs each column player</p>
+  <div class="h2h-wrap" id="h2hTable"></div>
+</div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+<div class="section-inner">
+  <div class="section-label">Photos</div>
+  <div class="section-title">Gallery</div>
+  <p class="gallery-note">
+    Add your photos by placing image files (e.g. <code style="color:var(--accent);background:rgba(232,200,74,0.1);padding:1px 5px;border-radius:3px">photo1.jpg</code>, <code style="color:var(--accent);background:rgba(232,200,74,0.1);padding:1px 5px;border-radius:3px">photo2.jpg</code>) in the same folder as <code style="color:var(--accent);background:rgba(232,200,74,0.1);padding:1px 5px;border-radius:3px">index.html</code> and update the list below. Click any photo to expand it.
+  </p>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</div>
+</section>
+
+<!-- SOCIAL -->
+<section id="social">
+<div class="section-inner">
+  <div class="section-label">Follow us</div>
+  <div class="section-title">Find Us Online</div>
+  <div class="social-cards">
+    <div class="social-card">
+      <div class="social-icon-wrap" style="background:rgba(255,0,0,0.1)">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="#ff4444"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </div>
+      <div class="social-platform">YouTube</div>
+      <!-- REPLACE with your actual channel name and URL -->
+      <div class="social-handle">@NondescriptsPCName</div>
+      <a href="https://youtube.com/@NondescriptsPC" target="_blank" class="social-link yt-link">
+        Subscribe ↗
+      </a>
+    </div>
+    <div class="social-card">
+      <div class="social-icon-wrap" style="background:rgba(255,255,255,0.06)">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+      </div>
+      <div class="social-platform">TikTok</div>
+      <!-- REPLACE with your actual handle and URL -->
+      <div class="social-handle">@YourTikTokHandle</div>
+      <a href="https://tiktok.com/@YourHandle" target="_blank" class="social-link tt-link">
+        Follow ↗
+      </a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- SESSIONS -->
+<section id="sessions">
+<div class="section-inner">
+  <div class="section-label">History</div>
+  <div class="section-title">Session Log</div>
+  <div id="sessionLog"></div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img class="footer-logo-img" src="logo.png" alt="NPC" onerror="this.style.display='none'">
+  <div class="footer-logo-text">Nondescripts Pickleball Club</div>
+  <div class="footer-sub">Colombo, Sri Lanka · Est. 2026</div>
+  <div class="footer-social">
+    <a href="https://youtube.com/@NondescriptsPC" target="_blank">YouTube</a>
+    <a href="https://tiktok.com/@nondescripts.p.c" target="_blank">TikTok</a>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const PLAYERS=[
+  {key:'T',name:'Tikka',color:'#e8c84a'},
+  {key:'W',name:'Weera',color:'#3dba7a'},
+  {key:'J',name:'Janna',color:'#e05588'},
+  {key:'F',name:'Fonny',color:'#e87a40'},
+  {key:'O',name:'Oscar',color:'#7b6fe8'},
+  {key:'M',name:'Malitha',color:'#e8a84a'},
+  {key:'R',name:'Reon',color:'#8ab5d4'},
+];
+const PM=Object.fromEntries(PLAYERS.map(p=>[p.key,p]));
+
+// ── GALLERY PHOTOS ────────────────────────────────────────────────────────────
+// TO ADD PHOTOS: add filenames to this array e.g. "photo1.jpg"
+// Place the image files in the same folder as index.html
+const PHOTOS=[
+  // "photo1.jpg",
+];
+
+// ── GAMES ─────────────────────────────────────────────────────────────────────
+const G=[
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['O','M'],t2:['W','R'],w:['O','M'],s:[11,1]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['F','W'],t2:['T','J'],w:['T','J'],s:[11,3]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['O','M'],t2:['F','R'],w:['O','M'],s:[11,5]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['O','M'],w:['T','W'],s:[11,3]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,6]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['M','R'],t2:['J','F'],w:['J','F'],s:[12,10]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['O','M'],w:['T','W'],s:[11,9]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['J','F'],w:['J','F'],s:[11,5]},
+  {d:'21 Mar',tp:'doubles',loc:'Misfits',t1:['O','M'],t2:['J','F'],w:['J','F'],s:[11,1]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['T'],t2:['F'],w:['T'],s:[11,1]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['W'],t2:['F'],w:['W'],s:[11,5]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['W'],t2:['T'],w:['T'],s:[11,6]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['W'],t2:['F'],w:['W'],s:[12,10]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['T'],t2:['F'],w:['T'],s:[11,8]},
+  {d:'22 Mar',tp:'singles',loc:'WTP',t1:['T'],t2:['W'],w:['T'],s:[12,10]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,4]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['O','W'],t2:['J','F'],w:['J','F'],s:[11,9]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['O','T'],t2:['W','F'],w:['O','T'],s:[11,2]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['O','W'],t2:['J','F'],w:['J','F'],s:[11,8]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['J','F'],w:['J','F'],s:[11,8]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','O'],t2:['J','F'],w:['T','O'],s:[11,2]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','O'],t2:['J','W'],w:['T','O'],s:[11,4]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,2]},
+  {d:'26 Mar',tp:'doubles',loc:'Misfits',t1:['T','O'],t2:['J','F'],w:['T','O'],s:[11,7]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['T','F'],t2:['M','W'],w:['M','W'],s:[11,7]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['O','W'],t2:['M','F'],w:['O','W'],s:[11,1]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['O','T'],t2:['M','F'],w:['O','T'],s:[11,7]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['O','F'],w:['T','W'],s:[11,4]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['T','W'],t2:['O','F'],w:['T','W'],s:[11,9]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['O','M'],t2:['W','F'],w:['O','M'],s:[11,6]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['O','T'],t2:['W','F'],w:['O','T'],s:[11,6]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['T','F'],t2:['M','W'],w:['M','W'],s:[13,11]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['O','W'],t2:['J','F'],w:['J','F'],s:[11,9]},
+  {d:'28 Mar AM',tp:'doubles',loc:'Misfits',t1:['T','M'],t2:['J','F'],w:['T','M'],s:[11,5]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,2]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','W'],t2:['J','F'],w:['J','F'],s:[11,6]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','W'],t2:['J','F'],w:['J','F'],s:[11,4]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,4]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','W'],t2:['J','F'],w:['T','W'],s:[11,1]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','J'],t2:['W','F'],w:['T','J'],s:[12,10]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','J'],t2:['W','F'],w:['T','J'],s:[12,10]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','F'],t2:['W','J'],w:['W','J'],s:[11,4]},
+  {d:'28 Mar PM',tp:'doubles',loc:'WTP',t1:['T','F'],t2:['W','J'],w:['T','F'],s:[11,9]},
+];
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function pWon(g,p){const mt=g.t1.includes(p)?g.t1:g.t2;return g.w.length===mt.length&&g.w.every(x=>mt.includes(x));}
+function pStats(p,fmt){
+  const gs=G.filter(g=>(g.t1.includes(p)||g.t2.includes(p))&&(fmt==='all'||g.tp===fmt));
+  let w=0,l=0,pf=0,pa=0;
+  gs.forEach(g=>{const won=pWon(g,p);const ms=won?g.s[0]:g.s[1],os=won?g.s[1]:g.s[0];pf+=ms;pa+=os;if(won)w++;else l++;});
+  const tot=w+l;
+  return{w,l,tot,pct:tot?Math.round(w/tot*100):0,pf,pa,diff:pf-pa,avgFor:tot?(pf/tot).toFixed(1):'-'};
+}
+
+// ── PLAYER GRID ───────────────────────────────────────────────────────────────
+let curFmt='all';
+function switchFmt(fmt,btn){
+  curFmt=fmt;
+  document.querySelectorAll('#fmtSwitch .fmt-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildPlayerGrid();
+}
+function buildPlayerGrid(){
+  const sorted=PLAYERS.map(p=>({...p,...pStats(p.key,curFmt)})).sort((a,b)=>b.pct-a.pct);
+  document.getElementById('playerGrid').innerHTML=sorted.map(p=>`
+    <div class="pcard">
+      <div class="pcard-top">
+        <div class="pavatar" style="background:${p.color}22;color:${p.color}">${p.name.slice(0,2).toUpperCase()}</div>
+        <div><div class="pcard-name">${p.name}</div><div class="pcard-role">${p.tot} games played</div></div>
+      </div>
+      <div class="pcard-stats">
+        <div><div class="pcs-label">Win rate</div><div class="pcs-val" style="color:${p.color}">${p.pct}%</div></div>
+        <div><div class="pcs-label">W / L</div><div class="pcs-val">${p.w} – ${p.l}</div></div>
+        <div><div class="pcs-label">Avg scored</div><div class="pcs-val">${p.avgFor}</div></div>
+        <div><div class="pcs-label">Pt diff</div><div class="pcs-val" style="color:${p.diff>=0?'var(--green)':'var(--red)'}">${p.diff>=0?'+':''}${p.diff}</div></div>
+      </div>
+      <div class="win-bar-bg"><div class="win-bar-fill" style="width:${p.pct}%;background:${p.color}"></div></div>
+    </div>`).join('');
+}
+
+// ── DUPR ──────────────────────────────────────────────────────────────────────
+const DK='npc_dupr_v2';
+function loadDupr(){
+  try{const r=localStorage.getItem(DK);if(r)return JSON.parse(r);}catch(e){}
+  const d={doubles:{},singles:{},updated:''};
+  PLAYERS.forEach(p=>{d.doubles[p.key]={r:3.000,prev:3.000};d.singles[p.key]={r:3.000,prev:3.000};});
+  return d;
+}
+function saveDupr(d){try{localStorage.setItem(DK,JSON.stringify(d));}catch(e){}}
+let DD=loadDupr(),DF='doubles',DE=false,DT={};
+function showDupr(fmt,btn){DF=fmt;document.querySelectorAll('.dupr-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(DE){PLAYERS.forEach(p=>{DT[p.key]=DD[DF][p.key].r;});}renderDupr();}
+function toggleEdit(){DE=true;DT={};PLAYERS.forEach(p=>{DT[p.key]=DD[DF][p.key].r;});document.getElementById('editBtn').textContent='Save & Update';document.getElementById('editBtn').onclick=saveEdit;document.getElementById('cancelEditBtn').style.display='inline-block';renderDupr();}
+function cancelEdit(){DE=false;document.getElementById('editBtn').textContent='Edit Ratings';document.getElementById('editBtn').onclick=toggleEdit;document.getElementById('cancelEditBtn').style.display='none';renderDupr();}
+function saveEdit(){
+  PLAYERS.forEach(p=>{const v=parseFloat(DT[p.key]);if(!isNaN(v)){DD[DF][p.key].prev=DD[DF][p.key].r;DD[DF][p.key].r=Math.round(v*1000)/1000;}});
+  DD.updated=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  saveDupr(DD);DE=false;
+  document.getElementById('editBtn').textContent='Edit Ratings';document.getElementById('editBtn').onclick=toggleEdit;document.getElementById('cancelEditBtn').style.display='none';
+  if(DD.updated)document.getElementById('duprUpdated').textContent='Last updated: '+DD.updated;
+  renderDupr();
+}
+function renderDupr(){
+  const sorted=PLAYERS.map(p=>({...p,...DD[DF][p.key]})).sort((a,b)=>b.r-a.r);
+  const maxR=Math.max(...sorted.map(p=>p.r)),minR=Math.min(...sorted.map(p=>p.r)),range=maxR-minR||0.001;
+  let h=`<table class="dupr-table"><thead><tr><th style="width:40px">#</th><th>Player</th><th class="r">Rating</th><th class="r">Change</th><th class="r" style="min-width:120px">Scale</th></tr></thead><tbody>`;
+  sorted.forEach((p,i)=>{
+    const rc=i===0?'g':i===1?'s':i===2?'b':'';
+    const delta=Math.round((p.r-p.prev)*1000)/1000;
+    const dh=delta===0?`<span class="delta-nil">—</span>`:delta>0?`<span class="delta-up">+${delta.toFixed(3)}</span>`:`<span class="delta-dn">${delta.toFixed(3)}</span>`;
+    const bw=Math.round(((p.r-minR)/range)*100);
+    const rc2=DE?`<input class="rating-input" id="di_${p.key}" type="number" step="0.001" min="1" max="8" value="${(DT[p.key]||p.r).toFixed(3)}" oninput="DT['${p.key}']=this.value" />`:`<span class="d-rating" style="color:${p.color}">${p.r.toFixed(3)}</span>`;
+    h+=`<tr><td><span class="rank-badge ${rc}">${i+1}</span></td><td><span class="d-avatar" style="background:${p.color}22;color:${p.color}">${p.name.slice(0,2).toUpperCase()}</span><span class="d-name">${p.name}</span></td><td class="r">${rc2}</td><td class="d-delta">${dh}</td><td class="r"><div class="dupr-bar-bg"><div class="dupr-bar-fill" style="width:${bw}%;background:${p.color}"></div></div></td></tr>`;
+  });
+  h+=`</tbody></table>`;
+  if(DD.updated)h+=`<div class="last-updated">Last updated: ${DD.updated}</div>`;
+  document.getElementById('duprBoard').innerHTML=h;
+}
+
+// ── H2H ───────────────────────────────────────────────────────────────────────
+function buildH2H(filter){
+  const gs=filter==='all'?G:G.filter(g=>g.tp===filter);
+  const rec={};PLAYERS.forEach(a=>{rec[a.key]={};PLAYERS.forEach(b=>{rec[a.key][b.key]={w:0,l:0};});});
+  gs.forEach(g=>{[...g.t1,...g.t2].forEach(p=>{const myT=g.t1.includes(p)?g.t1:g.t2,oppT=g.t1.includes(p)?g.t2:g.t1,won=pWon(g,p);oppT.forEach(op=>{if(won)rec[p][op].w++;else rec[p][op].l++;});});});
+  let h=`<table class="h2h-table"><thead><tr><th>vs</th>${PLAYERS.map(p=>`<th>${p.name.slice(0,3)}</th>`).join('')}</tr></thead><tbody>`;
+  PLAYERS.forEach(a=>{
+    h+=`<tr><td style="color:${a.color}">${a.name}</td>`;
+    PLAYERS.forEach(b=>{
+      if(a.key===b.key){h+=`<td class="h2h-self">—</td>`;return;}
+      const r=rec[a.key][b.key],tot=r.w+r.l;
+      if(!tot){h+=`<td style="color:var(--muted)">-</td>`;return;}
+      h+=`<td class="${r.w>r.l?'h2h-win':r.w<r.l?'h2h-loss':''}">${r.w}-${r.l}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  document.getElementById('h2hTable').innerHTML=h+`</tbody></table>`;
+}
+function showH2H(fmt,btn){document.querySelectorAll('#h2h .fmt-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');buildH2H(fmt);}
+
+// ── GALLERY ───────────────────────────────────────────────────────────────────
+function buildGallery(){
+  const grid=document.getElementById('galleryGrid');
+  if(PHOTOS.length===0){
+    grid.innerHTML=`<div class="upload-hint" style="grid-column:1/-1">
+      No photos yet. Add photo filenames to the <code style="color:var(--accent)">PHOTOS</code> array in the code and place the image files in the same folder.<br><br>
+      Example: <code style="color:var(--accent)">const PHOTOS = ["photo1.jpg","photo2.jpg"];</code>
+    </div>`;return;
+  }
+  grid.innerHTML=PHOTOS.map(src=>`
+    <div class="gallery-item" onclick="openLightbox('${src}')">
+      <img src="${src}" alt="NPC photo" loading="lazy">
+    </div>`).join('');
+}
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+
+// ── SESSIONS ──────────────────────────────────────────────────────────────────
+function buildSessions(){
+  const sessions=[
+    {date:'21 Mar 2026',loc:'Misfits Pickleball, Delkanda',type:'doubles',key:'21 Mar'},
+    {date:'22 Mar 2026',loc:'What The Pickle, Rajagiriya',type:'singles',key:'22 Mar'},
+    {date:'26 Mar 2026',loc:'Misfits Pickleball, Delkanda',type:'doubles',key:'26 Mar'},
+    {date:'28 Mar 2026 – Morning',loc:'Misfits Pickleball, Delkanda',type:'doubles',key:'28 Mar AM'},
+    {date:'28 Mar 2026 – Evening',loc:'What The Pickle, Rajagiriya',type:'doubles',key:'28 Mar PM'},
+  ];
+  document.getElementById('sessionLog').innerHTML=sessions.map((s,si)=>{
+    const gs=G.filter(g=>g.d===s.key);
+    const rows=gs.map((g,gi)=>{
+      const t1n=g.t1.map(k=>PM[k].name).join(' & '),t2n=g.t2.map(k=>PM[k].name).join(' & ');
+      const wn=g.w.map(k=>PM[k].name).join(' & ');
+      const sc=g.w.every(x=>g.t1.includes(x))?`${g.s[0]}-${g.s[1]}`:`${g.s[1]}-${g.s[0]}`;
+      return`<div class="game-row"><span class="game-num">Game ${gi+1}</span><span class="game-teams">${t1n} <span style="color:var(--muted)">vs</span> ${t2n}</span><span class="game-score">${wn} ${sc}</span></div>`;
+    }).join('');
+    const pill=s.type==='singles'?`<span class="spill spill-s">Singles</span>`:`<span class="spill spill-d">Doubles</span>`;
+    return`<div class="session-card"><div class="session-hdr" onclick="toggleSession(${si})"><div><div class="session-date">${s.date}</div><div class="session-meta">${s.loc} · ${gs.length} games</div></div><div style="display:flex;align-items:center;gap:10px">${pill}<span class="chevron" id="chev${si}">▼</span></div></div><div class="session-body" id="sbody${si}">${rows}</div></div>`;
+  }).join('');
+}
+function toggleSession(i){document.getElementById('sbody'+i).classList.toggle('open');document.getElementById('chev'+i).classList.toggle('open');}
+
+// ── CHART ─────────────────────────────────────────────────────────────────────
+function buildChart(){
+  const pts={};let total=0,margin=0;
+  PLAYERS.forEach(p=>{pts[p.key]=0;});
+  G.forEach(g=>{
+    total+=g.s[0]+g.s[1];margin+=g.s[0]-g.s[1];
+    const loser=g.t1.every(x=>g.w.includes(x))?g.t2:g.t1;
+    g.w.forEach(p=>{if(pts[p]!==undefined)pts[p]+=g.s[0];});
+    loser.forEach(p=>{if(pts[p]!==undefined)pts[p]+=g.s[1];});
+  });
+  document.getElementById('totalPts').textContent=total;
+  document.getElementById('avgMargin').textContent=(margin/G.length).toFixed(1);
+  new Chart(document.getElementById('ptChart'),{
+    type:'bar',
+    data:{labels:PLAYERS.map(p=>p.name),datasets:[{label:'Points scored',data:PLAYERS.map(p=>pts[p.key]),backgroundColor:PLAYERS.map(p=>p.color+'99'),borderColor:PLAYERS.map(p=>p.color),borderWidth:2,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#8a9ab5',font:{family:'Barlow',size:12}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8a9ab5',font:{size:11}}}}}
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildPlayerGrid();
+buildH2H('all');
+buildSessions();
+buildGallery();
+buildChart();
+renderDupr();
+if(DD.updated)document.getElementById('duprUpdated').textContent='Last updated: '+DD.updated;
+</script>
+</body>
+</html>
